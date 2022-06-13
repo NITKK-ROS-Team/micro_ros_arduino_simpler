@@ -4,7 +4,7 @@ Template of microROS-Arduino on PlatformIO
 
 ## main.cpp
 
-This is a sample program that counts the number of times a bool type is received and true is received.
+This is a sample program that counts the number of times a true (bool type) is received.
 
 
 ```c++
