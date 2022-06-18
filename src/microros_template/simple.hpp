@@ -50,10 +50,31 @@ void init_executor(int _num_of_callback)
 }
 
 // setup micro_ros_arduino =====================================================
+char *ipToString_under_16bit(uint32_t ip){
+    char *result = (char *)malloc(7);
+
+    sprintf(result, "%d_%d",
+            (ip >> 16) & 0xFF,
+            (ip >> 24) & 0xFF
+            );
+
+    return result;
+}
+
 int setup_microros_wifi(char *_node_name, char *_namespace, int _total_callback_count, char *_wifi_ssid, char *_wifi_password, char *host_ip, int host_port)
 {
     set_microros_wifi_transports(_wifi_ssid, _wifi_password, host_ip, host_port);
     get_default_allocator();
+
+    // WiFi get ip address
+    char *ip_address = (char *)malloc(10);
+    sprintf(ip_address, "ip_%s", ipToString_under_16bit(WiFi.localIP()));
+    Serial.println(ip_address);
+
+    // _namespace is "ip"
+    if (strcmp(_namespace, "ip") == 0) {
+        _namespace = ip_address;
+    }
 
     rclc_init(_node_name, _namespace);
     init_executor(_total_callback_count);
