@@ -22,14 +22,29 @@ rcl_node_t node;
 
 #define LED_PIN 13
 
-#define RCCHECK(fn) { rcl_ret_t temp_rc = fn; if((temp_rc != RCL_RET_OK)){error_loop();}}
-#define RCSOFTCHECK(fn) { rcl_ret_t temp_rc = fn; if((temp_rc != RCL_RET_OK)){}}
+#define RCCHECK(fn)                  \
+    {                                \
+        rcl_ret_t temp_rc = fn;      \
+        if ((temp_rc != RCL_RET_OK)) \
+        {                            \
+            error_loop();            \
+        }                            \
+    }
+#define RCSOFTCHECK(fn)              \
+    {                                \
+        rcl_ret_t temp_rc = fn;      \
+        if ((temp_rc != RCL_RET_OK)) \
+        {                            \
+        }                            \
+    }
 
-void error_loop(){
-  while(1){
-    digitalWrite(LED_PIN, !digitalRead(LED_PIN));
-    delay(100);
-  }
+void error_loop()
+{
+    while (1)
+    {
+        digitalWrite(LED_PIN, !digitalRead(LED_PIN));
+        delay(100);
+    }
 }
 
 // rclc init ===================================================================
@@ -50,33 +65,42 @@ void init_executor(int _num_of_callback)
 }
 
 // setup micro_ros_arduino =====================================================
-char *ipToString_under_16bit(uint32_t ip){
+char *ipToString_under_16bit(uint32_t ip)
+{
     char *result = (char *)malloc(7);
 
     sprintf(result, "%d_%d",
             (ip >> 16) & 0xFF,
-            (ip >> 24) & 0xFF
-            );
+            (ip >> 24) & 0xFF);
 
     return result;
 }
 
-int setup_microros_wifi(char *_node_name, char *_namespace, int _total_callback_count, char *_wifi_ssid, char *_wifi_password, char *host_ip, int host_port)
+int setup_microros_wifi(char *_node_name, char *_namespace, int _total_callback_count, char *_wifi_ssid, char *_wifi_password, char *host_ip, int host_port = 2000, bool _auto_ns_detect = false)
 {
     set_microros_wifi_transports(_wifi_ssid, _wifi_password, host_ip, host_port);
     get_default_allocator();
 
-    // WiFi get ip address
-    char *ip_address = (char *)malloc(10);
-    sprintf(ip_address, "ip_%s", ipToString_under_16bit(WiFi.localIP()));
-    Serial.println(ip_address);
+    char *result_namespace;
 
-    // _namespace is "ip"
-    if (strcmp(_namespace, "ip") == 0) {
-        _namespace = ip_address;
+    if (_auto_ns_detect && strlen(_namespace) == 0)
+    {
+        result_namespace = (char *)malloc(10);
+        sprintf(result_namespace, "ip_%s", ipToString_under_16bit(WiFi.localIP()));
+    }
+    else if (_auto_ns_detect)
+    {
+        result_namespace = (char *)malloc(strlen(_namespace) + 10);
+        sprintf(result_namespace, "ip_%s/%s", ipToString_under_16bit(WiFi.localIP()), _namespace);
+        Serial.println(result_namespace);
+    }
+    else
+    {
+        result_namespace = (char *)malloc(strlen(_namespace) + 1);
+        strcpy(result_namespace, _namespace);
     }
 
-    rclc_init(_node_name, _namespace);
+    rclc_init(_node_name, result_namespace);
     init_executor(_total_callback_count);
     return 0;
 }
@@ -106,7 +130,7 @@ void rclc_create_timer_and_add(rcl_timer_t *timer, unsigned int _timeout_ms, rcl
 }
 
 // create subscription and add to executor =========================================================
-void rclc_create_subscription_and_add(rcl_subscription_t *_subscription, const rosidl_message_type_support_t *_type_support, void *msg, rclc_subscription_callback_t _callback, char *_topic_name, const rclc_executor_handle_invocation_t _invocation=ON_NEW_DATA)
+void rclc_create_subscription_and_add(rcl_subscription_t *_subscription, const rosidl_message_type_support_t *_type_support, void *msg, rclc_subscription_callback_t _callback, char *_topic_name, const rclc_executor_handle_invocation_t _invocation = ON_NEW_DATA)
 {
     rclc_subscription_init_default(_subscription, &node, _type_support, _topic_name);
     rclc_executor_add_subscription(&executor, _subscription, &msg, _callback, _invocation);
