@@ -10,7 +10,7 @@
 #include <rclc/rclc.h>
 #include <rclc/executor.h>
 // ============================================================================
-#include "load_agent_id_eeprom.h"
+#include "load_agent_id_eeprom.hpp"
 
 rclc_executor_t executor;
 rclc_support_t support;
