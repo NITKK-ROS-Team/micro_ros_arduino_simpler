@@ -5,6 +5,8 @@
 
 // microros definition =====================================================
 #include "microros_template/simple.hpp"
+// #include "microros_template/load_agent_id_eeprom.h"
+
 #include <std_msgs/msg/bool.h>
 #include <std_msgs/msg/int32.h>
 
@@ -43,8 +45,8 @@ void timer_callback(rcl_timer_t *timer, int64_t last_call_time)
 // ### setup
 void setup()
 {
-  setup_microros_usb("microros_node", "", 2);
-  // setup_microros_wifi("microros_node", "", 2, "ssid", "pass", "192.168.0.10", 2000);
+  setup_microros_usb("microros_node", "", 1);
+  // setup_microros_wifi("microros_node", "", 1, "ssid", "pass", "192.168.0.10", 2000);
 
   rclc_publisher_init_default(&publisher, &node, ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Int32), "int32_data");
 
