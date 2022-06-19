@@ -332,16 +332,6 @@ void input_agent_id()
 DATA_SET load_data(bool _btn_is_pressed)
 {
     EEPROM.get<DATA_SET>(0, uros_config);
-    Serial.println("");
-    Serial.println("-------- Load data ----------");
-    Serial.println("Node name: " + String(uros_config.node_name));
-    Serial.println("Node namespace: " + String(uros_config.node_namespace));
-    Serial.println("Description: " + String(uros_config.description));
-    Serial.println("SSID: " + String(uros_config.ssid));
-    Serial.println("PASS: " + String(uros_config.pass));
-    Serial.println("IP: " + String(uros_config.agent_ip_address));
-    Serial.println("port: " + String(uros_config.agent_port));
-    Serial.println("------------------------------");
 
     if (!_btn_is_pressed)
     {
@@ -358,10 +348,8 @@ DATA_SET load_data(bool _btn_is_pressed)
     input_agent_ip_address();
     input_agent_id();
 
-    // enter command "_" on end of input
-
     Serial.println("");
-    Serial.println("-------- Input OK ! ----------");
+    Serial.println("-------- Load data ----------");
     Serial.println("Node name: " + String(uros_config.node_name));
     Serial.println("Node namespace: " + String(uros_config.node_namespace));
     Serial.println("Description: " + String(uros_config.description));
