@@ -35,7 +35,7 @@ void save_data(DATA_SET _data)
 void input_node_name()
 {
     Serial.print("Input node-name address");
-    Serial.println(" input '/' to skip): ");
+    Serial.print(" input '/' to skip: ");
 
     char c;
     int i = 0;
@@ -77,7 +77,7 @@ void input_node_name()
 void input_node_namespace()
 {
     Serial.print("Input node_namespace address");
-    Serial.println(" input '/' to skip): ");
+    Serial.print(" input '/' to skip: ");
 
     char c;
     int i = 0;
@@ -119,7 +119,7 @@ void input_node_namespace()
 void input_description()
 {
     Serial.print("Input description address");
-    Serial.println(" input '/' to skip): ");
+    Serial.print(" input '/' to skip: ");
 
     char c;
     int i = 0;
@@ -161,7 +161,7 @@ void input_description()
 void input_ssid()
 {
     Serial.print("Input SSID address");
-    Serial.println(" input '/' to skip): ");
+    Serial.print(" input '/' to skip: ");
 
     char c;
     int i = 0;
@@ -203,7 +203,7 @@ void input_ssid()
 void input_pass()
 {
     Serial.print("Input Password address");
-    Serial.println(" input '/' to skip): ");
+    Serial.print(" input '/' to skip: ");
 
     char c;
     int i = 0;
@@ -245,7 +245,7 @@ void input_pass()
 void input_agent_ip_address()
 {
     Serial.print("Input IP address");
-    Serial.println(" input '/' to skip): ");
+    Serial.print(" input '/' to skip: ");
 
     char c;
     int i = 0;
@@ -287,7 +287,7 @@ void input_agent_ip_address()
 void input_agent_id()
 {
     Serial.print("Input agent-ID");
-    Serial.println(" input '/' to skip): ");
+    Serial.print(" input '/' to skip: ");
 
     char c;
     int i = 0;
