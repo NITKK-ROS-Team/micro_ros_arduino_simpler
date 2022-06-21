@@ -5,6 +5,7 @@
 
 // microros definition =====================================================
 #include "microros_template/simple.hpp"
+// #include "microros_template/load_agent_id_eeprom.hpp"
 
 #include <std_msgs/msg/bool.h>
 #include <std_msgs/msg/int32.h>
@@ -48,8 +49,10 @@ void setup()
   // setup_microros_wifi("microros_node", "", 1, "ssid", "pass", "192.168.0.10", 2000);
 
   // // load config from eeprom----------------------------------------------
-  // DATA_SET config = eeprom_load_agent_port(M5.Btn.isPressed());
-  // setup_microros_wifi(config, 1, true);
+#ifdef LOAD_AGENT_ID_EEPROM_HPP_DEFINED
+  uros_ns config = eeprom_load_agent_port(M5.Btn.isPressed());
+  setup_microros_wifi(config, 1);
+#endif
 
   rclc_publisher_init_default(&publisher, &node, ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Int32), "int32_data");
 

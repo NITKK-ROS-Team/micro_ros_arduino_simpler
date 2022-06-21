@@ -1,21 +1,12 @@
 #pragma once
+#define LOAD_AGENT_ID_EEPROM_HPP_DEFINED
 
 #include <Arduino.h>
 #include <EEPROM.h>
 
-#define DATA_LENGTH 25
+#include "config_uros_namespace.hpp"
 
-struct DATA_SET
-{
-    char node_name[DATA_LENGTH];
-    char node_namespace[DATA_LENGTH];
-    char description[DATA_LENGTH];
-    char ssid[DATA_LENGTH];
-    char pass[DATA_LENGTH];
-    char agent_ip_address[DATA_LENGTH];
-    int agent_port;
-};
-DATA_SET uros_config;
+uros_ns uros_namespace_config;
 
 void clear_data()
 {
@@ -25,23 +16,18 @@ void clear_data()
     }
 }
 
-void save_data(DATA_SET _data)
+void save_data(uros_ns _data)
 {
-    EEPROM.put<DATA_SET>(0, _data);
+    EEPROM.put<uros_ns>(0, _data);
     EEPROM.commit();
 }
 
 // --------------------------------------------------
-void input_node_name()
+
+bool serial_input_return_chararray(char *_input_char)
 {
-    Serial.print("Input node-name address");
-    Serial.print(" input '/' to skip: ");
-
     char c;
-    int i = 0;
-    char input_char[DATA_LENGTH];
-    bool skiped = false;
-
+    bool _skiped = false;
     while (c != '\n')
     {
         if (Serial.available())
@@ -49,27 +35,41 @@ void input_node_name()
             c = Serial.read();
             if (c == '\n')
             {
+                _skiped = false;
                 break;
             }
             else if (c == '/')
             {
                 Serial.println("Skip!");
-                skiped = true;
+                _input_char++;
+                _skiped = true;
                 break;
             }
             else
             {
-                input_char[i] = c;
-                i++;
+                *_input_char = c;
+                _input_char++;
                 Serial.print(c);
             }
         }
         delay(10);
     }
+    *_input_char = '\0';
+    return _skiped;
+}
+
+void input_node_name()
+{
+    Serial.print("Input node-name address");
+    Serial.print(" input '/' to skip: ");
+
+    char input_char[DATA_LENGTH];
+    bool skiped = false;
+
+    skiped = serial_input_return_chararray(input_char);
     if (!skiped)
     {
-        input_char[i] = '\0';
-        strcpy(uros_config.node_name, input_char);
+        strcpy(uros_namespace_config.node_name, input_char);
     }
     Serial.println("");
 }
@@ -79,39 +79,13 @@ void input_node_namespace()
     Serial.print("Input node_namespace address");
     Serial.print(" input '/' to skip: ");
 
-    char c;
-    int i = 0;
     char input_char[DATA_LENGTH];
     bool skiped = false;
 
-    while (c != '\n')
-    {
-        if (Serial.available())
-        {
-            c = Serial.read();
-            if (c == '\n')
-            {
-                break;
-            }
-            else if (c == '/')
-            {
-                Serial.println("Skip!");
-                skiped = true;
-                break;
-            }
-            else
-            {
-                input_char[i] = c;
-                i++;
-                Serial.print(c);
-            }
-        }
-        delay(10);
-    }
+    skiped = serial_input_return_chararray(input_char);
     if (!skiped)
     {
-        input_char[i] = '\0';
-        strcpy(uros_config.node_namespace, input_char);
+        strcpy(uros_namespace_config.node_namespace, input_char);
     }
     Serial.println("");
 }
@@ -121,39 +95,13 @@ void input_description()
     Serial.print("Input description address");
     Serial.print(" input '/' to skip: ");
 
-    char c;
-    int i = 0;
     char input_char[DATA_LENGTH];
     bool skiped = false;
 
-    while (c != '\n')
-    {
-        if (Serial.available())
-        {
-            c = Serial.read();
-            if (c == '\n')
-            {
-                break;
-            }
-            else if (c == '/')
-            {
-                Serial.println("Skip!");
-                skiped = true;
-                break;
-            }
-            else
-            {
-                input_char[i] = c;
-                i++;
-                Serial.print(c);
-            }
-        }
-        delay(10);
-    }
+    skiped = serial_input_return_chararray(input_char);
     if (!skiped)
     {
-        input_char[i] = '\0';
-        strcpy(uros_config.description, input_char);
+        strcpy(uros_namespace_config.description, input_char);
     }
     Serial.println("");
 }
@@ -163,39 +111,13 @@ void input_ssid()
     Serial.print("Input SSID address");
     Serial.print(" input '/' to skip: ");
 
-    char c;
-    int i = 0;
     char input_char[DATA_LENGTH];
     bool skiped = false;
 
-    while (c != '\n')
-    {
-        if (Serial.available())
-        {
-            c = Serial.read();
-            if (c == '\n')
-            {
-                break;
-            }
-            else if (c == '/')
-            {
-                Serial.println("Skip!");
-                skiped = true;
-                break;
-            }
-            else
-            {
-                input_char[i] = c;
-                i++;
-                Serial.print(c);
-            }
-        }
-        delay(10);
-    }
+    skiped = serial_input_return_chararray(input_char);
     if (!skiped)
     {
-        input_char[i] = '\0';
-        strcpy(uros_config.ssid, input_char);
+        strcpy(uros_namespace_config.ssid, input_char);
     }
     Serial.println("");
 }
@@ -205,39 +127,13 @@ void input_pass()
     Serial.print("Input Password address");
     Serial.print(" input '/' to skip: ");
 
-    char c;
-    int i = 0;
     char input_char[DATA_LENGTH];
     bool skiped = false;
 
-    while (c != '\n')
-    {
-        if (Serial.available())
-        {
-            c = Serial.read();
-            if (c == '\n')
-            {
-                break;
-            }
-            else if (c == '/')
-            {
-                Serial.println("Skip!");
-                skiped = true;
-                break;
-            }
-            else
-            {
-                input_char[i] = c;
-                i++;
-                Serial.print(c);
-            }
-        }
-        delay(10);
-    }
+    skiped = serial_input_return_chararray(input_char);
     if (!skiped)
     {
-        input_char[i] = '\0';
-        strcpy(uros_config.pass, input_char);
+        strcpy(uros_namespace_config.pass, input_char);
     }
     Serial.println("");
 }
@@ -247,39 +143,13 @@ void input_agent_ip_address()
     Serial.print("Input IP address");
     Serial.print(" input '/' to skip: ");
 
-    char c;
-    int i = 0;
     char input_char[DATA_LENGTH];
     bool skiped = false;
 
-    while (c != '\n')
-    {
-        if (Serial.available())
-        {
-            c = Serial.read();
-            if (c == '\n')
-            {
-                break;
-            }
-            else if (c == '/')
-            {
-                Serial.println("Skip!");
-                skiped = true;
-                break;
-            }
-            else
-            {
-                input_char[i] = c;
-                i++;
-                Serial.print(c);
-            }
-        }
-        delay(10);
-    }
+    skiped = serial_input_return_chararray(input_char);
     if (!skiped)
     {
-        input_char[i] = '\0';
-        strcpy(uros_config.agent_ip_address, input_char);
+        strcpy(uros_namespace_config.agent_ip_address, input_char);
     }
     Serial.println("");
 }
@@ -289,54 +159,64 @@ void input_agent_id()
     Serial.print("Input agent-ID");
     Serial.print(" input '/' to skip: ");
 
-    char c;
-    int i = 0;
     char input_char[DATA_LENGTH];
     bool skiped = false;
 
     clear_data();
-    while (c != '\n')
-    {
-        if (Serial.available())
-        {
-            c = Serial.read();
-            if (c == '\n')
-            {
-                break;
-            }
-            else if (c == '/')
-            {
-                Serial.println("Skip!");
-                skiped = true;
-                break;
-            }
-            else
-            {
-                input_char[i] = c;
-                i++;
-                Serial.print(c);
-            }
-        }
-        delay(10);
-    }
+    skiped = serial_input_return_chararray(input_char);
     if (!skiped)
     {
-        input_char[i] = '\0';
         int port = atoi(input_char);
-        uros_config.agent_port = port;
+        uros_namespace_config.agent_port = port;
+    }
+    Serial.println("");
+}
+
+void input_auto_ns_detect()
+{
+    Serial.print("Input agent-ns-detect (1 or 0)");
+    Serial.print(" input '/' to skip: ");
+
+    char input_char[DATA_LENGTH];
+    bool skiped = false;
+
+    clear_data();
+    skiped = serial_input_return_chararray(input_char);
+    if (!skiped)
+    {
+        int _auto_detect = atoi(input_char);
+        uros_namespace_config.auto_ns_detect = _auto_detect;
+    }
+    Serial.println("");
+}
+
+void input_agent_port_as_namespace()
+{
+    Serial.print("Input agent-port-as-namespace (1 or 0)");
+    Serial.print(" input '/' to skip: ");
+
+    char input_char[DATA_LENGTH];
+    bool skiped = false;
+
+    clear_data();
+    skiped = serial_input_return_chararray(input_char);
+    if (!skiped)
+    {
+        int _agent_port_as_namespace = atoi(input_char);
+        uros_namespace_config.agent_port_as_namespace = _agent_port_as_namespace;
     }
     Serial.println("");
 }
 // --------------------------------------------------
 
-DATA_SET load_data(bool _btn_is_pressed)
+uros_ns load_data(bool _btn_is_pressed)
 {
-    EEPROM.get<DATA_SET>(0, uros_config);
+    EEPROM.get<uros_ns>(0, uros_namespace_config);
 
     if (!_btn_is_pressed)
     {
         Serial.println("Skip");
-        return uros_config;
+        return uros_namespace_config;
     }
 
     input_node_name();
@@ -348,24 +228,31 @@ DATA_SET load_data(bool _btn_is_pressed)
     input_agent_ip_address();
     input_agent_id();
 
+    input_auto_ns_detect();
+    input_agent_port_as_namespace();
+
+
     Serial.println("");
     Serial.println("-------- Load data ----------");
-    Serial.println("Node name: " + String(uros_config.node_name));
-    Serial.println("Node namespace: " + String(uros_config.node_namespace));
-    Serial.println("Description: " + String(uros_config.description));
-    Serial.println("SSID: " + String(uros_config.ssid));
-    Serial.println("PASS: " + String(uros_config.pass));
-    Serial.println("IP: " + String(uros_config.agent_ip_address));
-    Serial.println("port: " + String(uros_config.agent_port));
+    Serial.println("Node name: " + String(uros_namespace_config.node_name));
+    Serial.println("Node namespace: " + String(uros_namespace_config.node_namespace));
+    Serial.println("Description: " + String(uros_namespace_config.description));
+    Serial.println("SSID: " + String(uros_namespace_config.ssid));
+    // Serial.println("PASS: " + String(uros_namespace_config.pass));
+    Serial.println("PASS: ******");
+    Serial.println("IP: " + String(uros_namespace_config.agent_ip_address));
+    Serial.println("port: " + String(uros_namespace_config.agent_port));
+    Serial.println("auto_ns_detect: " + String(uros_namespace_config.auto_ns_detect));
+    Serial.println("agent_port_as_namespace: " + String(uros_namespace_config.agent_port_as_namespace));
     Serial.println("------------------------------");
 
-    save_data(uros_config);
+    save_data(uros_namespace_config);
     EEPROM.end();
-    return uros_config;
+    return uros_namespace_config;
 }
 
-DATA_SET eeprom_load_agent_port(int _btn_is_pressed)
+uros_ns eeprom_load_agent_port(int _btn_is_pressed)
 {
-    EEPROM.begin(sizeof(DATA_SET));
+    EEPROM.begin(sizeof(uros_ns));
     return load_data(_btn_is_pressed);
 }

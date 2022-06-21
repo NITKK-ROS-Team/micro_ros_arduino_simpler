@@ -10,7 +10,7 @@
 #include <rclc/rclc.h>
 #include <rclc/executor.h>
 // ============================================================================
-#include "load_agent_id_eeprom.hpp"
+#include "config_uros_namespace.hpp"
 
 rclc_executor_t executor;
 rclc_support_t support;
@@ -77,8 +77,8 @@ char *ipToString_under_16bit(uint32_t ip)
     return result;
 }
 
-
-int setup_microros_wifi(DATA_SET _config, int _total_callback_count, bool _auto_ns_detect = false)
+#ifdef CONFIG_UROS_NAMESPACE_HPP_DEFINED
+int setup_microros_wifi(uros_ns _config, int _total_callback_count)
 {
     char _ssid[DATA_LENGTH];
     char _password[DATA_LENGTH];
@@ -86,6 +86,14 @@ int setup_microros_wifi(DATA_SET _config, int _total_callback_count, bool _auto_
     int _host_port;
     char _node_name[DATA_LENGTH];
     char _namespace[DATA_LENGTH];
+    bool _auto_ns_detect;
+    bool _agent_port_as_namespace;
+
+    char _agent_port_header[4] = "ag_";
+    char _my_ip_header[4] = "ip_";
+
+    char *_result_namespace;
+    int _allocator_size = 0;
 
     strcpy(_ssid, _config.ssid);
     strcpy(_password, _config.pass);
@@ -93,40 +101,75 @@ int setup_microros_wifi(DATA_SET _config, int _total_callback_count, bool _auto_
     _host_port = _config.agent_port;
     strcpy(_node_name, _config.node_name);
     strcpy(_namespace, _config.node_namespace);
-
-    _ssid[strlen(_ssid) - 1] = '\0';
-    _password[strlen(_password) - 1] = '\0';
-    _host_ip[strlen(_host_ip) - 1] = '\0';
-    _node_name[strlen(_node_name) - 1] = '\0';
-    _namespace[strlen(_namespace) - 1] = '\0';
+    _auto_ns_detect = _config.auto_ns_detect;
+    _agent_port_as_namespace = _config.agent_port_as_namespace;
 
     set_microros_wifi_transports(_ssid, _password, _host_ip, _host_port);
     Serial.println("Connected to WiFi");
     get_default_allocator();
 
-    char *result_namespace;
+    int _slash_allocate_size =1;
 
-    if(_auto_ns_detect && strlen(_namespace) == 0)
+    // /ag_port/ip_addr/ns/node_name
+    if (_agent_port_as_namespace)
     {
-        result_namespace = (char *)malloc(10);
-        sprintf(result_namespace, "ip_%s", ipToString_under_16bit(WiFi.localIP()));
+        // port -> 5 chars
+        _allocator_size += strlen(_agent_port_header) + 5 + _slash_allocate_size;
     }
-    else if (_auto_ns_detect)
+    if (_auto_ns_detect)
     {
-        result_namespace = (char *)malloc(strlen(_namespace) + 10);
-        sprintf(result_namespace, "ip_%s/%s", ipToString_under_16bit(WiFi.localIP()), _namespace);
-        Serial.println(result_namespace);
+        _allocator_size += strlen(_my_ip_header) + 7 + _slash_allocate_size;
+    }
+    if (strlen(_namespace) > 0)
+    {
+        _allocator_size += strlen(_namespace);
+    }
+    _allocator_size += 1; // to add '\0'
+
+    _result_namespace = (char *)malloc(_allocator_size);
+// -----------------------------------------------------------------------------
+    if (_agent_port_as_namespace)
+    {
+        char *host_port_char = (char *)malloc(5);
+
+        strcat(_result_namespace, _agent_port_header);
+        sprintf(host_port_char, "%d", _host_port);
+
+        strcat(_result_namespace, host_port_char);
+        if (_auto_ns_detect || strlen(_namespace) > 0)
+        {
+            strcat(_result_namespace, "/");
+        }
+        free(host_port_char);
+    }
+    if (_auto_ns_detect)
+    {
+        strcat(_result_namespace, _my_ip_header);
+        strcat(_result_namespace, ipToString_under_16bit(WiFi.localIP()));
+         if (strlen(_namespace) > 0)
+        {
+            strcat(_result_namespace, "/");
+        }
+    }
+    if (strlen(_namespace) > 0)
+    {
+        strcat(_result_namespace, _namespace);
     }
     else
     {
-        result_namespace = (char *)malloc(strlen(_namespace) + 1);
-        strcpy(result_namespace, _namespace);
+        strcat(_result_namespace, "\0");
     }
 
-    rclc_init(_node_name, result_namespace);
+    Serial.print("Namespace: ");
+    Serial.println(String(_result_namespace));
+
+    rclc_init(_node_name, _result_namespace);
     init_executor(_total_callback_count);
+
+    free(_result_namespace);
     return 0;
 }
+#endif
 
 int setup_microros_wifi(char *_node_name, char *_namespace, int _total_callback_count, char *_ssid, char *_password, char *_host_ip, int _host_port = 2000, bool _auto_ns_detect = false)
 {
@@ -134,26 +177,26 @@ int setup_microros_wifi(char *_node_name, char *_namespace, int _total_callback_
     Serial.println("Connected to WiFi");
     get_default_allocator();
 
-    char *result_namespace;
+    char *_result_namespace;
 
     if(_auto_ns_detect && strlen(_namespace) == 0)
     {
-        result_namespace = (char *)malloc(10);
-        sprintf(result_namespace, "ip_%s", ipToString_under_16bit(WiFi.localIP()));
+        _result_namespace = (char *)malloc(10);
+        sprintf(_result_namespace, "ip_%s", ipToString_under_16bit(WiFi.localIP()));
     }
     else if (_auto_ns_detect)
     {
-        result_namespace = (char *)malloc(strlen(_namespace) + 10);
-        sprintf(result_namespace, "ip_%s/%s", ipToString_under_16bit(WiFi.localIP()), _namespace);
-        Serial.println(result_namespace);
+        _result_namespace = (char *)malloc(strlen(_namespace) + 10);
+        sprintf(_result_namespace, "ip_%s/%s", ipToString_under_16bit(WiFi.localIP()), _namespace);
+        Serial.println(_result_namespace);
     }
     else
     {
-        result_namespace = (char *)malloc(strlen(_namespace) + 1);
-        strcpy(result_namespace, _namespace);
+        _result_namespace = (char *)malloc(strlen(_namespace) + 1);
+        strcpy(_result_namespace, _namespace);
     }
 
-    rclc_init(_node_name, result_namespace);
+    rclc_init(_node_name, _result_namespace);
     init_executor(_total_callback_count);
     return 0;
 }
