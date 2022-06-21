@@ -1,5 +1,4 @@
 #pragma once
-#define LOAD_AGENT_ID_EEPROM_HPP_DEFINED
 
 #include <Arduino.h>
 #include <EEPROM.h>
@@ -24,7 +23,7 @@ void save_data(uros_ns _data)
 
 // --------------------------------------------------
 
-bool serial_input_return_chararray(char *_input_char)
+bool serial_input_return_chararray(char *_input_char, bool anonymous=false)
 {
     char c;
     bool _skiped = false;
@@ -49,7 +48,14 @@ bool serial_input_return_chararray(char *_input_char)
             {
                 *_input_char = c;
                 _input_char++;
-                Serial.print(c);
+                if (anonymous)
+                {
+                    Serial.print("*");
+                }
+                else
+                {
+                    Serial.print(c);
+                }
             }
         }
         delay(10);
@@ -130,7 +136,7 @@ void input_pass()
     char input_char[DATA_LENGTH];
     bool skiped = false;
 
-    skiped = serial_input_return_chararray(input_char);
+    skiped = serial_input_return_chararray(input_char, true);
     if (!skiped)
     {
         strcpy(uros_namespace_config.pass, input_char);
