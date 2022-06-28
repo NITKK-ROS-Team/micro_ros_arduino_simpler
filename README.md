@@ -114,3 +114,24 @@ void loop()
 - Arduino Loop. It can be written to work, but the basic idea is to use a timer callback.
   - rclc_delay : Equivalent to `rclcpp::spin_some()`.
 Template of microROS-Arduino on PlatformIO
+
+## Using [microROS-agent-pairing](https://github.com/NITKK-ROS-Team/microROS-agent-pairing)
+
+"microROS-agent-pairing" is a means of overriding the microROS-agent's settings without changing the program, even if the microROS-agent's connection point changes.
+
+### requirements
+
+- Wi-Fi
+- Any button or trigger
+
+### code
+
+Replace `setup_microros_wifi` with the following
+
+```c++
+  // setup_microros_wifi("microros_node", "", 2, "ssid", "pass", "192.168.0.10", 2000);
+
+  // Toggle between write/read configuration　(true: write config mode, false: load config mode)
+  uros_ns config = eeprom_load_agent_port(bool_trigger); // e.g. M5.Btn.isPressed()
+  setup_microros_wifi(config, 2);
+```
