@@ -292,7 +292,7 @@ uros_ns load_data(bool _btn_is_pressed)
     return uros_namespace_config;
 }
 
-uros_ns eeprom_load_agent_port(int _btn_is_pressed)
+uros_ns eeprom_load_agent_port(bool _btn_is_pressed)
 {
     EEPROM.begin(sizeof(uros_ns));
     return load_data(_btn_is_pressed);
