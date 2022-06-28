@@ -5,7 +5,7 @@
 
 // microros definition =====================================================
 #include "microros_template/simple.hpp"
-#include "microros_template/load_agent_id_eeprom.hpp"
+// #include "microros_template/load_agent_id_eeprom.hpp"
 
 #include <std_msgs/msg/bool.h>
 #include <std_msgs/msg/int32.h>
@@ -42,24 +42,25 @@ void timer_callback(rcl_timer_t *timer, int64_t last_call_time)
 }
 
 // setup micro_ros_arduino ===============================================
-// ### setup
 void setup()
 {
-  // setup_microros_usb("microros_node", "", 1);
-  // setup_microros_wifi("microros_node", "", 1, "ssid", "pass", "192.168.0.10", 2000);
-
-  // // load config from eeprom----------------------------------------------
 #ifdef LOAD_AGENT_ID_EEPROM_HPP_DEFINED
+// load config from eeprom----------------------------------------------
   uros_ns config = eeprom_load_agent_port(M5.Btn.isPressed());
   setup_microros_wifi(config, 2);
+#else
+  setup_microros_usb("microros_node", "", 1);
+  // setup_microros_wifi("microros_node", "", 1, "ssid", "pass", "192.168.0.10", 2000);
 #endif
 
+  // rclc-publisher-subscriber-timer ======================================
   rclc_publisher_init_default(&publisher, &node, ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Int32), "int32_data");
 
   rclc_create_timer_and_add(&timer, 10, timer_callback);
   rclc_create_subscription_and_add(&subscription, ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Bool), &msg_bool, &bool_callback, "bool_data");
 }
 
+// loop micro_ros_arduino ===============================================
 void loop()
 {
   rclc_delay(10);
