@@ -5,7 +5,7 @@
 
 // microros definition =====================================================
 #include "microros_template/simple.hpp"
-// #include "microros_template/load_agent_id_eeprom.hpp"
+#include "microros_template/load_agent_id_eeprom.hpp"
 
 #include <std_msgs/msg/bool.h>
 #include <std_msgs/msg/int32.h>
@@ -23,7 +23,7 @@ std_msgs__msg__Bool msg_bool;
 rcl_timer_t timer;
 // ==========================================================================
 
-unsigned int counter = 0;
+int counter = 0;
 
 // subscription callback ("/bool_data", "std_msgs/msg/bool") ================
 void bool_callback(const void *msgin)
@@ -45,13 +45,13 @@ void timer_callback(rcl_timer_t *timer, int64_t last_call_time)
 // ### setup
 void setup()
 {
-  setup_microros_usb("microros_node", "", 1);
+  // setup_microros_usb("microros_node", "", 1);
   // setup_microros_wifi("microros_node", "", 1, "ssid", "pass", "192.168.0.10", 2000);
 
   // // load config from eeprom----------------------------------------------
 #ifdef LOAD_AGENT_ID_EEPROM_HPP_DEFINED
   uros_ns config = eeprom_load_agent_port(M5.Btn.isPressed());
-  setup_microros_wifi(config, 1);
+  setup_microros_wifi(config, 2);
 #endif
 
   rclc_publisher_init_default(&publisher, &node, ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Int32), "int32_data");

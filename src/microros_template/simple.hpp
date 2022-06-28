@@ -77,6 +77,38 @@ char *ipToString_under_16bit(uint32_t ip)
     return result;
 }
 
+size_t split(char* s, const char* separator, char** result, size_t result_size)
+{
+    assert(s != NULL);
+    assert(separator != NULL);
+    assert(result != NULL);
+    assert(result_size > 0);
+
+    size_t i = 0;
+
+    char* p = strtok(s, separator);
+    while (p != NULL) {
+        assert(i < result_size);
+        result[i] = p;
+        ++i;
+
+        p = strtok(NULL, separator);
+    }
+
+    return i;
+}
+
+char *hostip_under_8bit(char *hostip)
+{
+    // e.g. 192,168,100.200
+    char *result = (char *)malloc(4);
+
+    char *ip_array[4];
+    size_t ip_array_size = split(hostip, ".", ip_array, 4);
+
+    return ip_array[3];
+}
+
 #ifdef CONFIG_UROS_NAMESPACE_HPP_DEFINED
 int setup_microros_wifi(uros_ns _config, int _total_callback_count)
 {
@@ -114,7 +146,7 @@ int setup_microros_wifi(uros_ns _config, int _total_callback_count)
     if (_agent_port_as_namespace)
     {
         // port -> 5 chars
-        _allocator_size += strlen(_agent_port_header) + 5 + _slash_allocate_size;
+        _allocator_size += strlen(_agent_port_header) + 9 + _slash_allocate_size;
     }
     if (_auto_ns_detect)
     {
@@ -130,10 +162,15 @@ int setup_microros_wifi(uros_ns _config, int _total_callback_count)
 // -----------------------------------------------------------------------------
     if (_agent_port_as_namespace)
     {
-        char *host_port_char = (char *)malloc(5);
+        char *host_port_char = (char *)malloc(9);
+
+        // _host_ip -> "192.168.xxx.yyy" -> get yyy
+        char *host_ip_char = hostip_under_8bit(_host_ip);
+
 
         strcat(_result_namespace, _agent_port_header);
-        sprintf(host_port_char, "%d", _host_port);
+        strcat(_result_namespace, host_ip_char);
+        sprintf(host_port_char, "_%d", _host_port);
 
         strcat(_result_namespace, host_port_char);
         if (_auto_ns_detect || strlen(_namespace) > 0)

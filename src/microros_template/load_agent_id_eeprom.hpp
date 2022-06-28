@@ -1,5 +1,7 @@
 #pragma once
 
+#define LOAD_AGENT_ID_EEPROM_HPP_DEFINED
+
 #include <Arduino.h>
 #include <EEPROM.h>
 
@@ -66,6 +68,25 @@ bool serial_input_return_chararray(char *_input_char, bool anonymous=false)
 
 void input_node_name()
 {
+
+    // if read something from serial, escape
+    bool sended = false;
+    while (sended == false)
+    {
+        char out_char = 'a';
+
+        if (Serial.available())
+        {
+            char c = Serial.read();
+            sended = true;
+        }
+        else
+        {
+            Serial.write(out_char);
+        }
+        delay(10);
+    }
+
     Serial.print("Input node-name address");
     Serial.print(" input '/' to skip: ");
 
@@ -219,6 +240,20 @@ uros_ns load_data(bool _btn_is_pressed)
 {
     EEPROM.get<uros_ns>(0, uros_namespace_config);
 
+    Serial.println("");
+    Serial.println("-------- Load data ----------");
+    Serial.println("Node name: " + String(uros_namespace_config.node_name));
+    Serial.println("Node namespace: " + String(uros_namespace_config.node_namespace));
+    Serial.println("Description: " + String(uros_namespace_config.description));
+    Serial.println("SSID: " + String(uros_namespace_config.ssid));
+    // Serial.println("PASS: " + String(uros_namespace_config.pass));
+    Serial.println("PASS: ******");
+    Serial.println("IP: " + String(uros_namespace_config.agent_ip_address));
+    Serial.println("port: " + String(uros_namespace_config.agent_port));
+    Serial.println("auto_ns_detect: " + String(uros_namespace_config.auto_ns_detect));
+    Serial.println("agent_port_as_namespace: " + String(uros_namespace_config.agent_port_as_namespace));
+    Serial.println("------------------------------");
+
     if (!_btn_is_pressed)
     {
         Serial.println("Skip");
@@ -239,7 +274,7 @@ uros_ns load_data(bool _btn_is_pressed)
 
 
     Serial.println("");
-    Serial.println("-------- Load data ----------");
+    Serial.println("-------- ReWrite data ----------");
     Serial.println("Node name: " + String(uros_namespace_config.node_name));
     Serial.println("Node namespace: " + String(uros_namespace_config.node_namespace));
     Serial.println("Description: " + String(uros_namespace_config.description));
