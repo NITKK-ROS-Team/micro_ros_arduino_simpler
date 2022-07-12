@@ -195,7 +195,7 @@ Template of microROS-Arduino on PlatformIO
 Replace `setup_microros_wifi` with the following
 
 ```c++
-#include "microros_template/config_loader/load_agent_id_eeprom.hpp"
+#include "microros_template/config_loader/load_agent_id_eeprom.hpp" // add
 
 // ---
 
