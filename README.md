@@ -2,10 +2,67 @@
 
 Template of microROS-Arduino on PlatformIO
 
-## main.cpp
+## Support devices
+
+| Board | Ethernet | Wi-Fi | USB | configure |
+| --- | --- | --- | --- | --- |
+| M5Core2 | | ✅ | ✅ | ✅ (EEPROM) |
+| ESP32-Pico | | ✅ | ✅ | ✅ (EEPROM) |
+| STM32F7Discovery | ✅ | | | |
+
+<br>
+
+## ESP32 (M5Core2, M5Atom, M5Stick)
+
+<details>
+<summary>Platformio.ini</summary>
+
+```ini
+;; ==========================================================================
+;;                      ESP32, ESP32-Pico Wi-Fi Model
+;; ==========================================================================
+[env:microros-template]
+platform = https://github.com/platformio/platform-espressif32.git#feature/arduino-upstream
+; board = m5stack-core2
+board = m5stick-c ;; m5stick-c or m5atom
+framework = arduino
+
+monitor_speed = 115200
+upload_speed = 115200
+upload_device = /dev/ttyUSB1
+
+lib_deps =
+;; m5core2 ---------------------------------------------------------------
+    ; m5stack/M5Core2@^0.1.0
+;; m5stick-c -------------------------------------------------------------
+    ; m5stack/M5StickCPlus@^0.0.5
+;; m5atom ----------------------------------------------------------------
+    m5stack/M5Atom@^0.0.9
+    fastled/FastLED@^3.5.0
+
+;; microros ---------------------------------------------------------------
+    https://github.com/micro-ROS/micro_ros_arduino.git
+
+build_flags =
+    -L ./.pio/libdeps/esp32dev/micro_ros_arduino/src/esp32/
+    -l microros
+    -D ESP32
+
+platform_packages =
+  toolchain-xtensa32 @ ~2.80400.0
+  framework-arduinoespressif32@https://github.com/espressif/arduino-esp32.git#2.0.2
+```
+
+</details>
+
+<br>
+
+### Example source code
 
 This is a sample program that counts the number of times a true (bool type) is received.
 
+<details>
+<summary>main.cpp</summary>
 
 ```c++
 #include <Arduino.h>
@@ -68,6 +125,11 @@ void loop()
 }
 
 ```
+</details>
+
+<br>
+
+## microROS-arduino-template notation
 
 ### header
 - include `"microros_template/simple.hpp"` to use microROS-Arduino-Template API.
@@ -115,13 +177,15 @@ void loop()
   - rclc_delay : Equivalent to `rclcpp::spin_some()`.
 Template of microROS-Arduino on PlatformIO
 
-## Using [microROS-agent-pairing](https://github.com/NITKK-ROS-Team/microROS-agent-pairing)
+<br>
+
+## Using [microROS-agent-pairing](https://github.com/NITKK-ROS-Team/microROS-agent-pairing) (ESP32-EEPROM)
 
 "microROS-agent-pairing" is a means of overriding the microROS-agent's settings without changing the program, even if the microROS-agent's connection point changes.
 
 ### requirements
 
-- Wi-Fi
+- Wi-Fi (ESP32)
 - Any button or trigger
 
 ### code
@@ -135,3 +199,51 @@ Replace `setup_microros_wifi` with the following
   uros_ns config = eeprom_load_agent_port(bool_trigger); // e.g. M5.Btn.isPressed()
   setup_microros_wifi(config, 2);
 ```
+
+<br>
+
+## STM32F7Discovery
+
+Replace `setup_microros_wifi` with the following
+
+```c++
+  byte arduino_mac[] = {0xAA, 0xBB, 0xCC, 0xEE, 0xDD, 0xFF};
+  IPAddress arduino_ip(192, 168, 10, 111);
+  IPAddress agent_ip(192, 168, 10, 6);
+  int agent_port = 2000;
+
+  setup_microros_ethernet("uros_node", "ns", 2, arduino_mac, arduino_ip, agent_ip, agent_port);
+```
+
+STM32 Series using ststm32 platform. Change platformio.ini
+
+<details>
+<summary>Platformio.ini</summary>
+
+```ini
+;; ==========================================================================
+;;                       STM32F4, F7 Ethernet Model
+;; ==========================================================================
+
+[env:disco_f746ng]
+platform = ststm32
+board = disco_f746ng
+framework = arduino
+
+monitor_speed = 115200
+upload_speed = 115200
+upload_device = /dev/ttyUSB0
+
+lib_deps =
+
+;; microros ---------------------------------------------------------------
+    https://github.com/NITKK-ROS-Team/micro_ros_arduino
+    stm32duino/STM32Ethernet@^1.3.0
+    stm32duino/STM32duino LwIP@^2.1.2
+
+build_flags =
+    -L ./.pio/libdeps/disco_f746ng/micro_ros_arduino/src/cortex-m4/
+    -l microros
+
+```
+</details>
