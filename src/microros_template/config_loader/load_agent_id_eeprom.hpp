@@ -3,9 +3,12 @@
 #define LOAD_AGENT_ID_EEPROM_HPP_DEFINED
 
 #include <Arduino.h>
+
+#if defined(ESP32)
+
 #include <EEPROM.h>
 
-#include "config_uros_namespace.hpp"
+#include "../base/config_uros_namespace.hpp"
 
 uros_ns uros_namespace_config;
 
@@ -294,6 +297,9 @@ uros_ns load_data(bool _btn_is_pressed)
 
 uros_ns eeprom_load_agent_port(bool _btn_is_pressed)
 {
+    Serial.begin(115200);
+    Serial.println("EEPROM configure mode");
     EEPROM.begin(sizeof(uros_ns));
     return load_data(_btn_is_pressed);
 }
+#endif

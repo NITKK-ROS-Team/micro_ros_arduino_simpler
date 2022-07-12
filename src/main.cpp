@@ -5,7 +5,7 @@
 
 // microros definition =====================================================
 #include "microros_template/simple.hpp"
-// #include "microros_template/load_agent_id_eeprom.hpp"
+// #include "microros_template/config_loader/load_agent_id_eeprom.hpp" // for ESP32
 
 #include <std_msgs/msg/bool.h>
 #include <std_msgs/msg/int32.h>
@@ -35,7 +35,8 @@ void bool_callback(const void *msgin)
 // timer callback (10ms) ====================================================
 void timer_callback(rcl_timer_t *timer, int64_t last_call_time)
 {
-  (void)last_call_time; (void)timer;
+  (void)last_call_time;
+  (void)timer;
 
   msg_int32.data = counter;
   rcl_publish(&publisher, &msg_int32, NULL);
@@ -44,13 +45,30 @@ void timer_callback(rcl_timer_t *timer, int64_t last_call_time)
 // setup micro_ros_arduino ===============================================
 void setup()
 {
+
+// ESP32 ---------------------------------------------------------------
+#if defined(ESP32)
 #ifdef LOAD_AGENT_ID_EEPROM_HPP_DEFINED
-// load config from eeprom----------------------------------------------
+  // load config from eeprom-----
   uros_ns config = eeprom_load_agent_port(M5.Btn.isPressed());
   setup_microros_wifi(config, 2);
 #else
-  setup_microros_usb("microros_node", "", 1);
-  // setup_microros_wifi("microros_node", "", 1, "ssid", "pass", "192.168.0.10", 2000);
+  // Wi-Fi interface
+  setup_microros_wifi("microros_node", "", 2, "ssid", "pass", "192.168.0.10", 2000);
+#endif
+// STM32F746NG -----------------------------------------------------------
+#elif defined(ARDUINO_ARCH_STM32)
+  byte arduino_mac[] = {0xAA, 0xBB, 0xCC, 0xEE, 0xDD, 0xFF};
+  IPAddress arduino_ip(192, 168, 10, 111);
+  IPAddress agent_ip(192, 168, 10, 6);
+  int agent_port = 2000;
+
+  setup_microros_ethernet("uros_node", "ns", 2, arduino_mac, arduino_ip, agent_ip, agent_port);
+
+// Generic Interface ------------------------------------------------------
+#else
+  // UART
+  setup_microros_usb("microros_node", "", 2);
 #endif
 
   // rclc-publisher-subscriber-timer ======================================
