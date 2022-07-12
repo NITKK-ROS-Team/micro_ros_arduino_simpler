@@ -14,6 +14,8 @@ Template of microROS-Arduino on PlatformIO
 
 ## ESP32 (M5Core2, M5Atom, M5Stick)
 
+Device used : M5Atom
+
 <details>
 <summary>Platformio.ini</summary>
 
@@ -29,7 +31,7 @@ framework = arduino
 
 monitor_speed = 115200
 upload_speed = 115200
-upload_device = /dev/ttyUSB1
+upload_device = /dev/ttyUSB0
 
 lib_deps =
 ;; m5core2 ---------------------------------------------------------------
@@ -129,7 +131,7 @@ void loop()
 
 <br>
 
-## microROS-arduino-template notation
+## 🖊️ microROS-arduino-template notation
 
 ### header
 - include `"microros_template/simple.hpp"` to use microROS-Arduino-Template API.
@@ -179,7 +181,7 @@ Template of microROS-Arduino on PlatformIO
 
 <br>
 
-## Using [microROS-agent-pairing](https://github.com/NITKK-ROS-Team/microROS-agent-pairing) (ESP32-EEPROM)
+## 🔧 Using [microROS-agent-pairing](https://github.com/NITKK-ROS-Team/microROS-agent-pairing) (ESP32-EEPROM)
 
 "microROS-agent-pairing" is a means of overriding the microROS-agent's settings without changing the program, even if the microROS-agent's connection point changes.
 
