@@ -195,6 +195,10 @@ Template of microROS-Arduino on PlatformIO
 Replace `setup_microros_wifi` with the following
 
 ```c++
+#include "microros_template/config_loader/load_agent_id_eeprom.hpp"
+
+// ---
+
   // setup_microros_wifi("microros_node", "", 2, "ssid", "pass", "192.168.0.10", 2000);
 
   // Toggle between write/read configuration　(true: write config mode, false: load config mode)

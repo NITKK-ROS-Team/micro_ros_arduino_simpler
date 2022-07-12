@@ -5,7 +5,7 @@
 
 // microros definition =====================================================
 #include "microros_template/simple.hpp"
-#include "microros_template/config_loader/load_agent_id_eeprom.hpp" // for ESP32
+// #include "microros_template/config_loader/load_agent_id_eeprom.hpp" // for ESP32
 
 #include <std_msgs/msg/bool.h>
 #include <std_msgs/msg/int32.h>
