@@ -1,7 +1,10 @@
 #include <Arduino.h>
+
+#if defined(ESP32)
 #include <M5Atom.h>
 // #include <M5Core2.h>
 // #include <M5StickC.h>
+#endif
 
 // microros definition =====================================================
 #include "microros_template/simple.hpp"
@@ -54,7 +57,7 @@ void setup()
   setup_microros_wifi(config, 2);
 #else
   // Wi-Fi interface
-  setup_microros_wifi("microros_node", "", 2, "ssid", "pass", "192.168.0.10", 2000);
+  setup_microros_wifi("microros_node", "ns", 2, "ssid", "pass", "192.168.0.10", 2000);
 #endif
 // STM32F746NG -----------------------------------------------------------
 #elif defined(ARDUINO_ARCH_STM32)
@@ -68,7 +71,7 @@ void setup()
 // Generic Interface ------------------------------------------------------
 #else
   // UART
-  setup_microros_usb("microros_node", "", 2);
+  setup_microros_usb("microros_node", "ns", 2);
 #endif
 
   // rclc-publisher-subscriber-timer ======================================

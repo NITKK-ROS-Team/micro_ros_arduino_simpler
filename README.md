@@ -253,3 +253,28 @@ build_flags =
 
 ```
 </details>
+
+<br>
+
+## Easy test on commandline
+
+You can test if the device's pub-sub and timer are working properly following commands.
+
+### Terminal 1
+
+```bash
+docker run -it --rm --privileged --net=host microros/micro-ros-agent:galactic udp4 --port 2000
+```
+
+### Terminal2
+
+```bash
+ros2 topic pub /ns/bool_data std_msgs/msg/Bool data:\ true
+```
+
+### Terminal3
+
+```bash
+ros2 topic echo /ns/int32_data
+# The number will increase with each second.
+```
