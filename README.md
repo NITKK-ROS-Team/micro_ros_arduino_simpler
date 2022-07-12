@@ -197,7 +197,7 @@ Replace `setup_microros_wifi` with the following
 ```c++
 #include "microros_template/config_loader/load_agent_id_eeprom.hpp" // add
 
-// ---
+// ~~~
 
   // setup_microros_wifi("microros_node", "", 2, "ssid", "pass", "192.168.0.10", 2000);
 
