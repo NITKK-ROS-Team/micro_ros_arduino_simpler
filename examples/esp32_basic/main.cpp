@@ -7,8 +7,8 @@
 #endif
 
 // microros definition =====================================================
-#include "microros_template/simple.hpp"
-// #include "microros_template/config_loader/load_agent_id_eeprom.hpp" // for ESP32
+#include "micro_ros_arduino_simpler/simple.hpp"
+// #include "micro_ros_arduino_simpler/config_loader/load_agent_id_eeprom.hpp" // for ESP32
 
 #include <std_msgs/msg/bool.h>
 #include <std_msgs/msg/int32.h>
@@ -59,15 +59,6 @@ void setup()
   // Wi-Fi interface
   setup_microros_wifi("microros_node", "ns", 2, "ssid", "pass", "192.168.0.10", 2000);
 #endif
-// STM32F746NG -----------------------------------------------------------
-#elif defined(ARDUINO_ARCH_STM32)
-  byte arduino_mac[] = {0xAA, 0xBB, 0xCC, 0xEE, 0xDD, 0xFF};
-  IPAddress arduino_ip(192, 168, 10, 111);
-  IPAddress agent_ip(192, 168, 10, 6);
-  int agent_port = 2000;
-
-  setup_microros_ethernet("uros_node", "ns", 2, arduino_mac, arduino_ip, agent_ip, agent_port);
-
 // Generic Interface ------------------------------------------------------
 #else
   // UART
