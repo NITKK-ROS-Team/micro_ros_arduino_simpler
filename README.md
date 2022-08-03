@@ -2,6 +2,10 @@
 
 Template of microROS-Arduino on PlatformIO
 
+## 💬 Discussion
+
+- [Discussions tab](https://github.com/NITKK-ROS-Team/micro_ros_arduino_simpler/discussions)
+
 ## Support devices
 
 | Board | Ethernet | Wi-Fi | USB | configure |
