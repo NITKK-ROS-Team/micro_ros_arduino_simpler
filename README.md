@@ -2,9 +2,13 @@
 
 Simpler library for [microROS-Arduino](https://github.com/micro-ROS/micro_ros_arduino) on [PlatformIO](https://platformio.org).
 
+<br>
+
 ## 💬 Discussion
 
 - [Discussions tab](https://github.com/NITKK-ROS-Team/micro_ros_arduino_simpler/discussions)
+
+<br>
 
 ## Support devices
 
@@ -213,6 +217,7 @@ void loop()
   rclc_delay(10);
 }
 ```
+
 
 ### header
 - include `"microros_template/simple.hpp"` to use microROS-Arduino-Template API.
