@@ -12,7 +12,7 @@ Template of microROS-Arduino on PlatformIO
 
 <br>
 
-## ESP32 (M5Core2, M5Atom, M5Stick)
+## ⚡ ESP32 (M5Core2, M5Atom, M5Stick)
 
 Device used : M5Atom
 
@@ -145,7 +145,7 @@ void loop()
 #endif
 
 // microros definition =====================================================
-#include "micro_ros_arduino_simpler/simple.hpp"
+#include "micro_ros_arduino_simpler/simpler_base.h"
 // #include "micro_ros_arduino_simpler/config_eeprom.h" // using EEPROM (ESP32)
 
 #include <std_msgs/msg/bool.h>
@@ -258,7 +258,7 @@ Template of microROS-Arduino on PlatformIO
 
 <br>
 
-## 🔧 Using [microROS-agent-pairing](https://github.com/NITKK-ROS-Team/microROS-agent-pairing) (ESP32-EEPROM)
+### 🔧 Using [microROS-agent-pairing](https://github.com/NITKK-ROS-Team/microROS-agent-pairing) (ESP32-EEPROM)
 
 "microROS-agent-pairing" is a means of overriding the microROS-agent's settings without changing the program, even if the microROS-agent's connection point changes.
 
@@ -285,7 +285,7 @@ Replace `setup_microros_wifi` with the following
 
 <br>
 
-## STM32F7Discovery
+## ⚡ STM32F7Discovery
 
 Replace `setup_microros_wifi` with the following
 
