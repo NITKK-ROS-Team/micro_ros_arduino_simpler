@@ -1,6 +1,6 @@
 # micro_ros_arduino_simpler [WIP]
 
-Template of [microROS-Arduino](https://github.com/micro-ROS/micro_ros_arduino) on [PlatformIO](https://platformio.org).
+Simpler library for [microROS-Arduino](https://github.com/micro-ROS/micro_ros_arduino) on [PlatformIO](https://platformio.org).
 
 ## 💬 Discussion
 
