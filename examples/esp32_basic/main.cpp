@@ -8,7 +8,7 @@
 
 // microros definition =====================================================
 #include "micro_ros_arduino_simpler/simple.hpp"
-// #include "micro_ros_arduino_simpler/config_loader/load_agent_id_eeprom.hpp" // for ESP32
+// #include "micro_ros_arduino_simpler/config_eeprom.h" // for ESP32
 
 #include <std_msgs/msg/bool.h>
 #include <std_msgs/msg/int32.h>
