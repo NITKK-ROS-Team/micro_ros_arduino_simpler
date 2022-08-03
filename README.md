@@ -74,7 +74,7 @@ This is a sample program that counts the number of times a true (bool type) is r
 
 // microros definition =====================================================
 // ### header
-#include "microros_template/simple.hpp"
+#include "micro_ros_arduino_simpler/simpler_base.h"
 #include <std_msgs/msg/bool.h>
 #include <std_msgs/msg/int32.h>
 

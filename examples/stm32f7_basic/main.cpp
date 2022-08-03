@@ -1,7 +1,7 @@
 #include <Arduino.h>
 
 // microros definition =====================================================
-#include "micro_ros_arduino_simpler/simple.hpp"
+#include "micro_ros_arduino_simpler/simpler_base.h"
 
 
 #include <std_msgs/msg/bool.h>
