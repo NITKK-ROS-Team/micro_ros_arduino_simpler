@@ -220,7 +220,7 @@ void loop()
 
 
 ### header
-- include `"microros_template/simple.hpp"` to use microROS-Arduino-Template API.
+- include `"micro_ros_arduino_simpler/simpler_base.h"` to use microROS-Arduino-Template API.
 - include ros-messages to publish or subscribe messages.
 
 ### message definition
