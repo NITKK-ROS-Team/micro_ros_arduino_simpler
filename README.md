@@ -329,7 +329,7 @@ upload_device = /dev/ttyUSB0
 lib_deps =
 
 ;; microros ---------------------------------------------------------------
-    https://github.com/micro-ROS/micro_ros_arduino.git#v2.0.5-humble
+    https://github.com/NITKK-ROS-Team/micro_ros_arduino.git#humble
     https://github.com/NITKK-ROS-Team/micro_ros_arduino_simpler.git#main
 
     stm32duino/STM32Ethernet@^1.3.0
@@ -365,4 +365,34 @@ ros2 topic pub /ns/bool_data std_msgs/msg/Bool data:\ true
 ```bash
 ros2 topic echo /ns/int32_data
 # The number will increase with each second.
+```
+
+<br>
+
+## STM32L432KC + WS5100
+
+```ini
+[env:nucleo_l432kc]
+platform = ststm32
+board = nucleo_l432kc
+framework = arduino
+; change microcontroller
+board_build.mcu = stm32l432kcu6
+
+; change MCU frequency
+board_build.f_cpu = 80000000L
+
+monitor_speed = 115200
+upload_speed = 115200
+upload_device = /dev/ttyACM0
+
+lib_deps =
+;; microros ---------------------------------------------------------------
+    https://github.com/NITKK-ROS-Team/micro_ros_arduino.git#features/add_spi_eth
+
+    https://github.com/WIZnet-ArduinoEthernet/Ethernet.git
+
+build_flags =
+    -L ./.pio/libdeps/pico/micro_ros_arduino/src/cortex-m4/
+    -l microros
 ```
