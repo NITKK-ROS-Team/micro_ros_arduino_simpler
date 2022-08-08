@@ -43,7 +43,7 @@ void timer_callback(rcl_timer_t *timer, int64_t last_call_time)
 void setup()
 {
 #if !defined(STM32L4xx)
-#error "STM32L4xx is not defined"
+#error "This example is only for STM32L4xx"
 #endif
 
   byte arduino_mac[] = {0xAA, 0xBB, 0xCC, 0xEE, 0xDD, 0xFF};
