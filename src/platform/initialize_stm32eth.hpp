@@ -1,14 +1,21 @@
 #pragma once
 
+#if defined(ARDUINO_ARCH_STM32)
+
 #include "../base/unique_executor.hpp"
 #include "../base/ip_utils.hpp"
 #include "../uros_function/common_uros_function.hpp"
 
-#if defined(ARDUINO_ARCH_STM32)
-
-int setup_microros_ethernet(char *_node_name, char *_namespace, int _total_callback_count, byte *_mac_adder, IPAddress _my_ip, IPAddress _host_ip, int _host_port = 2000, bool _auto_ns_detect = false)
+int setup_microros_ethernet(char *_node_name, char *_namespace, int _total_callback_count, byte *_mac_adder, IPAddress _my_ip, IPAddress _host_ip, int _host_port = 2000, bool _auto_ns_detect = false, int _cs= -1)
 {
-    set_microros_native_ethernet_udp_transports(_mac_adder, _my_ip, _host_ip, _host_port);
+    if (_cs == - 1)
+    {
+        set_microros_native_ethernet_udp_transports(_mac_adder, _my_ip, _host_ip, _host_port);
+    }
+    else
+    {
+        set_microros_native_ethernet_udp_transports(_mac_adder, _my_ip, _host_ip, _host_port, _cs);
+    }
     Serial.println("Connected to Ethernet");
     get_default_allocator();
 

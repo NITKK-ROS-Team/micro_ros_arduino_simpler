@@ -1,11 +1,12 @@
 #pragma once
 
+// Setting up ROS =================================================================================
+#if defined(ESP32)
+
 #include "../base/unique_executor.hpp"
 #include "../base/ip_utils.hpp"
 #include "../uros_function/common_uros_function.hpp"
 
-// Setting up ROS =================================================================================
-#if defined(ESP32)
 #include "../base/config_uros_namespace.hpp"
 
 #ifdef CONFIG_UROS_NAMESPACE_HPP_DEFINED

@@ -6,12 +6,16 @@
 #include <string.h>
 
 // detect `IPAddress` type
-#if defined(TARGET_STM32F4) || defined(ARDUINO_ARCH_STM32)
+#if defined(TARGET_STM32F4)
 #include <STM32Ethernet.h>
 #elif defined(ESP32)
 #include <WiFi.h>
 #endif
 
+#if defined(STM32L4xx)
+#include <SPI.h>
+#include <EthernetUdp.h>
+#endif
 
 size_t split(char* s, const char* separator, char** result, size_t result_size)
 {

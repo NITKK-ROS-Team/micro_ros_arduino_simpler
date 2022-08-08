@@ -42,8 +42,9 @@ void timer_callback(rcl_timer_t *timer, int64_t last_call_time)
 // setup micro_ros_arduino ===============================================
 void setup()
 {
-// STM32F746NG -----------------------------------------------------------
-#if defined(STM32L4xx)
+#if !defined(STM32L4xx)
+#error "STM32L4xx is not defined"
+#endif
 
   byte arduino_mac[] = {0xAA, 0xBB, 0xCC, 0xEE, 0xDD, 0xFF};
   IPAddress arduino_ip(192, 168, 10, 111);
@@ -53,11 +54,6 @@ void setup()
 
   setup_microros_ethernet("uros_node", "ns", 2, arduino_mac, arduino_ip, agent_ip, agent_port, false, cs);
 
-// Generic Interface ------------------------------------------------------
-#else
-  // UART
-  setup_microros_usb("microros_node", "ns", 2);
-#endif
 
   // rclc-publisher-subscriber-timer ======================================
   rclc_publisher_init_default(&publisher, &node, ROSIDL_GET_MSG_TYPE_SUPPORT(std_msgs, msg, Int32), "int32_data");
