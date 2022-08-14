@@ -16,7 +16,8 @@ Simpler library for [microROS-Arduino](https://github.com/micro-ROS/micro_ros_ar
 | --- | --- | --- | --- | --- |
 | M5Core2 | | ✅ | ✅ | ✅ (EEPROM) |
 | ESP32-Pico | | ✅ | ✅ | ✅ (EEPROM) |
-| STM32F7Discovery | ✅ | | | |
+| STM32F7Discovery | ✅ | | ❓ | |
+| STM32L4 + WS5100S | ✅ | | ❓ | |
 
 <br>
 
