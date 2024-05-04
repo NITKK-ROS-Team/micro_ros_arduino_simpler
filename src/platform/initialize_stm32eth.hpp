@@ -1,6 +1,6 @@
 #pragma once
 
-#if defined(ARDUINO_ARCH_STM32)
+#if defined(ARDUINO_ARCH_STM32) || defined(ARDUINO_ARCH_RENESAS)
 
 #include "../base/unique_executor.hpp"
 #include "../base/ip_utils.hpp"
@@ -16,7 +16,9 @@ int setup_microros_ethernet(char *_node_name, char *_namespace, int _total_callb
     {
         set_microros_native_ethernet_udp_transports(_mac_adder, _my_ip, _host_ip, _host_port, _cs);
     }
-    Serial.println("Connected to Ethernet");
+
+    int status_ethernet = Ethernet.hardwareStatus();
+    Serial.println(status_ethernet);
     get_default_allocator();
 
     char *_result_namespace;
