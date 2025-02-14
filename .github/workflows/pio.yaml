@@ -1,0 +1,33 @@
+name: PlatformIO CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        project:
+          - examples
+
+    steps:
+      - name: checkout repository
+        uses: actions/checkout@v3
+
+      - name: setup Python3
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install PlatformIO
+        run: |
+          pip install --upgrade pip
+          pip install platformio
+
+      - name: ${{ matrix.project }} のビルド
+        working-directory: ${{ matrix.project }}
+        run: platformio run
