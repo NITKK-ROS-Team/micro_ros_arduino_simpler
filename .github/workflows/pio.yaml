@@ -7,6 +7,29 @@ on:
     branches: [ main ]
 
 jobs:
+  format-check:
+    name: Clang Format Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install clang-format
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-format
+
+      - name: Run clang-format check
+        run: |
+          echo "Checking all C/C++ files for formatting..."
+          find . -name '*.c' -o -name '*.cpp' -o -name '*.h' | while read file; do
+            if ! clang-format -style=file "$file" | diff -u "$file" -; then
+              echo "❌ Formatting error in $file"
+              exit 1
+            fi
+          done
+          echo "✅ All files are properly formatted."
   build:
     runs-on: ubuntu-latest
     strategy:
