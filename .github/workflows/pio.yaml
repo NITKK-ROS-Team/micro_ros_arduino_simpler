@@ -18,7 +18,7 @@ jobs:
       - name: Install clang-format
         run: |
           sudo apt-get update
-          sudo apt-get install -y clang-format
+          sudo apt-get install -y clang-format clang-tidy
 
       - name: Run clang-format check
         run: |
@@ -30,6 +30,15 @@ jobs:
             fi
           done
           echo "✅ All files are properly formatted."
+
+      - name: Run clang-tidy check
+        run: |
+          echo "Running clang-tidy on all C/C++ files..."
+          for file in $(find src include -type f \( -name "*.cpp" -o -name "*.c" -o -name "*.h" -o -name "*.hpp" \)); do
+            clang-tidy "$file" --warnings-as-errors=* -- -I include -I src || exit 1
+          done
+          echo "✅ Clang-tidy check passed."
+
   build:
     runs-on: ubuntu-latest
     strategy:

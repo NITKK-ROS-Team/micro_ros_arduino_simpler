@@ -3,8 +3,8 @@
 // Setting up ROS =================================================================================
 #if defined(ESP32)
 
-#include "../base/unique_executor.hpp"
 #include "../base/ip_utils.hpp"
+#include "../base/unique_executor.hpp"
 #include "../uros_function/common_uros_function.hpp"
 
 #include "../base/config_uros_namespace.hpp"
@@ -24,7 +24,7 @@ int setup_microros_wifi(uros_ns _config, int _total_callback_count)
     char _agent_port_header[4] = "ag_";
     char _my_ip_header[4] = "ip_";
 
-    char *_result_namespace;
+    char* _result_namespace;
     int _allocator_size = 0;
 
     strcpy(_ssid, _config.ssid);
@@ -40,7 +40,7 @@ int setup_microros_wifi(uros_ns _config, int _total_callback_count)
     Serial.println("Connected to WiFi");
     get_default_allocator();
 
-    int _slash_allocate_size =1;
+    int _slash_allocate_size = 1;
 
     // /ag_port/ip_addr/ns/node_name
     if (_agent_port_as_namespace)
@@ -58,15 +58,14 @@ int setup_microros_wifi(uros_ns _config, int _total_callback_count)
     }
     _allocator_size += 1; // to add '\0'
 
-    _result_namespace = (char *)malloc(_allocator_size);
-// -----------------------------------------------------------------------------
+    _result_namespace = (char*)malloc(_allocator_size);
+    // -----------------------------------------------------------------------------
     if (_agent_port_as_namespace)
     {
-        char *host_port_char = (char *)malloc(9);
+        char* host_port_char = (char*)malloc(9);
 
         // _host_ip -> "192.168.xxx.yyy" -> get yyy
-        char *host_ip_char = hostip_under_8bit(_host_ip);
-
+        char* host_ip_char = hostip_under_8bit(_host_ip);
 
         strcat(_result_namespace, _agent_port_header);
         strcat(_result_namespace, host_ip_char);
@@ -83,7 +82,7 @@ int setup_microros_wifi(uros_ns _config, int _total_callback_count)
     {
         strcat(_result_namespace, _my_ip_header);
         strcat(_result_namespace, ipToString_under_16bit(WiFi.localIP()));
-         if (strlen(_namespace) > 0)
+        if (strlen(_namespace) > 0)
         {
             strcat(_result_namespace, "/");
         }
@@ -108,28 +107,28 @@ int setup_microros_wifi(uros_ns _config, int _total_callback_count)
 }
 #endif
 
-int setup_microros_wifi(char *_node_name, char *_namespace, int _total_callback_count, char *_ssid, char *_password, char *_host_ip, int _host_port = 2000, bool _auto_ns_detect = false)
+int setup_microros_wifi(char* _node_name, char* _namespace, int _total_callback_count, char* _ssid, char* _password, char* _host_ip, int _host_port = 2000, bool _auto_ns_detect = false)
 {
     set_microros_wifi_transports(_ssid, _password, _host_ip, _host_port);
     Serial.println("Connected to WiFi");
     get_default_allocator();
 
-    char *_result_namespace;
+    char* _result_namespace;
 
-    if(_auto_ns_detect && strlen(_namespace) == 0)
+    if (_auto_ns_detect && strlen(_namespace) == 0)
     {
-        _result_namespace = (char *)malloc(10);
+        _result_namespace = (char*)malloc(10);
         sprintf(_result_namespace, "ip_%s", ipToString_under_16bit(WiFi.localIP()));
     }
     else if (_auto_ns_detect)
     {
-        _result_namespace = (char *)malloc(strlen(_namespace) + 10);
+        _result_namespace = (char*)malloc(strlen(_namespace) + 10);
         sprintf(_result_namespace, "ip_%s/%s", ipToString_under_16bit(WiFi.localIP()), _namespace);
         Serial.println(_result_namespace);
     }
     else
     {
-        _result_namespace = (char *)malloc(strlen(_namespace) + 1);
+        _result_namespace = (char*)malloc(strlen(_namespace) + 1);
         strcpy(_result_namespace, _namespace);
     }
 

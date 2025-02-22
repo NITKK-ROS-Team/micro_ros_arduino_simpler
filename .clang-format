@@ -1,0 +1,36 @@
+# To apply this style to your code, run:
+#  $ find . -type f -name "*.c" -o -name "*.cpp" -o -name "*.h" -o -name "*.hpp" | xargs clang-format -i -style=file
+
+BasedOnStyle: LLVM
+
+IndentWidth: 4
+UseTab: Never
+ContinuationIndentWidth: 4
+AccessModifierOffset: -4
+BreakBeforeBraces: Allman
+AlwaysBreakAfterReturnType: None
+AlwaysBreakBeforeMultilineStrings: true
+AllowShortFunctionsOnASingleLine: InlineOnly
+
+IndentCaseLabels: true
+SpaceBeforeParens: ControlStatements
+
+PointerAlignment: Left
+DerivePointerAlignment: false
+ReflowComments: true
+SortIncludes: true
+IncludeBlocks: Preserve
+
+ColumnLimit: 200
+
+NamespaceIndentation: All
+FixNamespaceComments: true
+
+SpacesInSquareBrackets: false
+Cpp11BracedListStyle: true
+BinPackParameters: false
+BinPackArguments: false
+AllowShortBlocksOnASingleLine: Never
+AllowAllParametersOfDeclarationOnNextLine: false
+IndentPPDirectives: None
+

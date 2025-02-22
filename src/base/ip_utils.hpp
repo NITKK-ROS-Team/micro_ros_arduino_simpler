@@ -1,8 +1,8 @@
 #pragma once
 
-#include <stdio.h>
-#include <memory>
 #include <assert.h>
+#include <memory>
+#include <stdio.h>
 #include <string.h>
 
 // detect `IPAddress` type
@@ -13,8 +13,8 @@
 #endif
 
 #if defined(STM32L4xx)
-#include <SPI.h>
 #include <EthernetUdp.h>
+#include <SPI.h>
 #endif
 
 size_t split(char* s, const char* separator, char** result, size_t result_size)
@@ -27,7 +27,8 @@ size_t split(char* s, const char* separator, char** result, size_t result_size)
     size_t i = 0;
 
     char* p = strtok(s, separator);
-    while (p != NULL) {
+    while (p != NULL)
+    {
         assert(i < result_size);
         result[i] = p;
         ++i;
@@ -39,42 +40,39 @@ size_t split(char* s, const char* separator, char** result, size_t result_size)
 }
 
 // setup micro_ros_arduino =====================================================
-char *ipToString_under_16bit(uint32_t ip)
+char* ipToString_under_16bit(uint32_t ip)
 {
-    char *result = (char *)malloc(7);
+    char* result = (char*)malloc(7);
 
-    sprintf(result, "%d_%d",
-            (ip >> 16) & 0xFF,
-            (ip >> 24) & 0xFF);
+    sprintf(result, "%d_%d", (ip >> 16) & 0xFF, (ip >> 24) & 0xFF);
 
     return result;
 }
 
-char *ipToString_under_16bit(IPAddress ip)
+char* ipToString_under_16bit(IPAddress ip)
 {
-    char *result = (char *)malloc(7);
+    char* result = (char*)malloc(7);
 
-    sprintf(result, "%d_%d",
-            ip[2], ip[3]);
+    sprintf(result, "%d_%d", ip[2], ip[3]);
 
     return result;
 }
 
-char *hostip_under_8bit(char *hostip)
+char* hostip_under_8bit(char* hostip)
 {
     // e.g. 192,168,100.200
-    char *result = (char *)malloc(4);
+    char* result = (char*)malloc(4);
 
-    char *ip_array[4];
+    char* ip_array[4];
     size_t ip_array_size = split(hostip, ".", ip_array, 4);
 
     return ip_array[3];
 }
 
-char *hostip_under_8bit(IPAddress hostip)
+char* hostip_under_8bit(IPAddress hostip)
 {
     // e.g. 192,168,100.200
-    char *result = (char *)malloc(4);
+    char* result = (char*)malloc(4);
 
     sprintf(result, "%d", hostip[3]);
 

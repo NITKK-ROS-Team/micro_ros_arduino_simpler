@@ -17,7 +17,7 @@ rcl_timer_t timer;
 
 int counter = 0;
 // timer callback (10ms) ====================================================
-void timer_callback(rcl_timer_t *timer, int64_t last_call_time)
+void timer_callback(rcl_timer_t* timer, int64_t last_call_time)
 {
     (void)last_call_time;
     (void)timer;
@@ -26,8 +26,8 @@ void timer_callback(rcl_timer_t *timer, int64_t last_call_time)
     int analog_x = analogRead(A0);
     int analog_y = analogRead(A1);
     // -5.0 to 5.0
-    float x = analog_x * (5.0 / 1023.0) -2.5;
-    float y = -1 * (analog_y * (5.0 / 1023.0) -2.5);
+    float x = analog_x * (5.0 / 1023.0) - 2.5;
+    float y = -1 * (analog_y * (5.0 / 1023.0) - 2.5);
     msg_twist.linear.x = x;
     msg_twist.angular.z = y;
     rcl_publish(&publisher, &msg_twist, NULL);

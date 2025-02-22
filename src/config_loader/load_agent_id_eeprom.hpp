@@ -28,7 +28,7 @@ void save_data(uros_ns _data)
 
 // --------------------------------------------------
 
-bool serial_input_return_chararray(char *_input_char, bool anonymous=false)
+bool serial_input_return_chararray(char* _input_char, bool anonymous = false)
 {
     char c;
     bool _skiped = false;
@@ -274,7 +274,6 @@ uros_ns load_data(bool _btn_is_pressed)
 
     input_auto_ns_detect();
     input_agent_port_as_namespace();
-
 
     Serial.println("");
     Serial.println("-------- ReWrite data ----------");
